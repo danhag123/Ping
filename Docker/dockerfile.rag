@@ -1,0 +1,38 @@
+# Use a lightweight Python image
+FROM python:3.9-slim
+
+# Set Poetry version
+ENV POETRY_VERSION=1.4.0
+
+# Upgrade pip and setuptools before installing Poetry
+RUN pip install --upgrade pip setuptools
+
+# Install Poetry globally
+RUN pip install "poetry==$POETRY_VERSION"
+
+# Install system dependencies, including Graphviz
+RUN apt-get update && apt-get install -y \
+    graphviz \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Prevent Poetry from creating a virtual environment
+RUN poetry config virtualenvs.create false
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Copy the entire project first
+COPY . /app/
+
+RUN mkdir -p /app/src/app/static
+COPY src/app/static /app/src/app/static
+
+# Install dependencies
+RUN poetry install --no-interaction --no-ansi
+
+# Expose the correct port
+EXPOSE 5000
+
+# Start FastAPI properly
+CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]

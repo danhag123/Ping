@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Form</title>
+</head>
+<body>
+    <form id="queryForm">
+        <label for="query">Query:</label>
+        <input type="text" id="query" name="query" value="Hur högt måste man kasta upp bollen?">
+        <button type="submit">Submit</button>
+    </form>
+
+    <pre id="response"></pre>
+
+<script>
+    document.getElementById('queryForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const query = document.getElementById('query').value;
+        const responseElement = document.getElementById('response');
+
+        try {
+            const response = await fetch('/api/query', {  // Changed from '/query'
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query })
+            });
+
+            const data = await response.json();
+            responseElement.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            responseElement.textContent = 'Error: ' + error.message;
+        }
+    });
+</script>
+</body>
+</html>

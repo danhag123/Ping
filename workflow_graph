@@ -1,0 +1,7 @@
+digraph {
+	rewrite_query [label="Rewrite Query"]
+	retrieve_docs [label="Retrieve Documents"]
+	generate_answer [label="Generate Answer"]
+	rewrite_query -> retrieve_docs
+	retrieve_docs -> generate_answer
+}

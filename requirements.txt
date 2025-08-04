@@ -1,0 +1,12 @@
+qdrant-client
+python-dotenv
+langchain-qdrant
+langchain-openai
+langchain-core
+pymupdf
+langchain-text-splitters
+langchain
+langgraph
+fastapi
+uvicorn
+graphviz
